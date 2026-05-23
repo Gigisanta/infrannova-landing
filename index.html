@@ -7,7 +7,7 @@
     <meta name="description" content="Plataforma integral de project management para empresas constructoras. Control de avance, costos, recursos y documentación en tiempo real.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         *, *::before, *::after {
@@ -57,10 +57,65 @@
             top: 0;
             left: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            z-index: 100;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            background-size: 200% 100%;
+            animation: gradientSlide 3s linear infinite;
+            z-index: 9999;
             width: 0%;
             transition: width 0.1s linear;
+            box-shadow: 0 0 15px var(--primary-glow), 0 0 30px var(--accent-glow);
+        }
+
+        @keyframes gradientSlide {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* === NOISE TEXTURE OVERLAY === */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        /* === PARTICLE SYSTEM === */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particleFloat 20s ease-in-out infinite;
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--accent);
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            25% { transform: translate(30px, -50px) scale(1.2); opacity: 0.5; }
+            50% { transform: translate(-20px, -100px) scale(0.8); opacity: 0.2; }
+            75% { transform: translate(40px, -50px) scale(1.1); opacity: 0.4; }
         }
 
         /* === BACKGROUND LAYERS === */
@@ -71,10 +126,16 @@
             width: 100%;
             height: 100%;
             background-image:
-                linear-gradient(rgba(42,46,53,0.2) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(42,46,53,0.2) 1px, transparent 1px);
+                linear-gradient(rgba(42,46,53,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42,46,53,0.15) 1px, transparent 1px);
             background-size: 80px 80px;
             z-index: -1;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .radial-glow {
@@ -89,6 +150,12 @@
                 radial-gradient(ellipse 60% 40% at 10% 60%, rgba(249,115,22,0.08) 0%, transparent 50%);
             z-index: -1;
             pointer-events: none;
+            animation: glowPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
         }
 
         .ambient-stripes {
@@ -108,6 +175,7 @@
             pointer-events: none;
         }
 
+        /* === GEOMETRIC FLOATING SHAPES === */
         .geo-shapes {
             position: fixed;
             top: 0;
@@ -121,7 +189,7 @@
 
         .geo-shape {
             position: absolute;
-            opacity: 0.08;
+            opacity: 0.1;
             animation: float 25s ease-in-out infinite;
         }
 
@@ -133,6 +201,7 @@
             border: 3px solid var(--primary);
             transform: rotate(45deg);
             animation-delay: 0s;
+            animation-duration: 20s;
         }
 
         .geo-shape:nth-child(2) {
@@ -143,6 +212,7 @@
             background: var(--accent);
             clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
             animation-delay: -8s;
+            animation-duration: 18s;
         }
 
         .geo-shape:nth-child(3) {
@@ -153,6 +223,7 @@
             border: 3px solid var(--accent);
             border-radius: 50%;
             animation-delay: -15s;
+            animation-duration: 22s;
         }
 
         .geo-shape:nth-child(4) {
@@ -162,6 +233,7 @@
             height: 3px;
             background: linear-gradient(90deg, var(--primary), transparent);
             animation-delay: -10s;
+            animation-duration: 16s;
         }
 
         .geo-shape:nth-child(5) {
@@ -172,6 +244,7 @@
             border: 3px solid var(--primary);
             clip-path: polygon(0 0, 100% 0, 100% 100%);
             animation-delay: -18s;
+            animation-duration: 24s;
         }
 
         .geo-shape:nth-child(6) {
@@ -182,6 +255,29 @@
             border: 3px solid var(--accent);
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
             animation-delay: -5s;
+            animation-duration: 19s;
+        }
+
+        .geo-shape:nth-child(7) {
+            top: 80%;
+            left: 15%;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation-delay: -12s;
+            animation-duration: 21s;
+        }
+
+        .geo-shape:nth-child(8) {
+            top: 15%;
+            right: 25%;
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            animation-delay: -7s;
+            animation-duration: 17s;
         }
 
         @keyframes float {
@@ -191,6 +287,22 @@
             75% { transform: translateY(-35px) rotate(2deg); }
         }
 
+        /* === SECTION TRANSITION LINES === */
+        .section-transition {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            opacity: 0.5;
+            animation: sectionLine 3s ease-in-out infinite;
+        }
+
+        @keyframes sectionLine {
+            0%, 100% { transform: scaleX(0.3); opacity: 0.3; }
+            50% { transform: scaleX(1); opacity: 0.6; }
+        }
+
         /* === ANIMATIONS === */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -198,13 +310,23 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(60px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideInRight {
             from { opacity: 0; transform: translateX(60px); }
             to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes pulse {
@@ -217,16 +339,98 @@
             50% { text-shadow: 0 0 40px var(--primary-glow), 0 0 60px var(--primary-glow); }
         }
 
-        .fade-in { animation: fadeIn 1s ease-out forwards; animation-fill-mode: both; }
-        .fade-in-up { animation: fadeInUp 0.9s ease-out forwards; animation-fill-mode: both; }
-        .slide-in-right { animation: slideInRight 1s ease-out forwards; animation-fill-mode: both; }
+        @keyframes borderGlow {
+            0%, 100% { box-shadow: 0 0 20px var(--primary-glow), inset 0 0 20px rgba(249,115,22,0.1); }
+            50% { box-shadow: 0 0 40px var(--primary-glow), inset 0 0 30px rgba(249,115,22,0.2); }
+        }
 
-        .delay-1 { animation-delay: 0.15s; }
-        .delay-2 { animation-delay: 0.25s; }
-        .delay-3 { animation-delay: 0.35s; }
-        .delay-4 { animation-delay: 0.45s; }
-        .delay-5 { animation-delay: 0.55s; }
-        .delay-6 { animation-delay: 0.65s; }
+        @keyframes conicRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes breathingGlow {
+            0%, 100% { box-shadow: 0 0 30px var(--primary-light), 0 8px 32px rgba(0,0,0,0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 50px var(--primary-glow), 0 8px 40px rgba(249,115,22,0.3); transform: scale(1.02); }
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes ganttFill {
+            from { width: 0%; }
+        }
+
+        @keyframes progressFill {
+            from { width: 0%; }
+        }
+
+        .fade-in { animation: fadeIn 1s ease-out forwards; animation-fill-mode: both; }
+        .fade-in-up { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-fill-mode: both; opacity: 0; }
+        .slide-in-right { animation: slideInRight 1s ease-out forwards; animation-fill-mode: both; }
+        .slide-in-left { animation: slideInLeft 1s ease-out forwards; animation-fill-mode: both; }
+        .scale-in { animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-fill-mode: both; }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+        .delay-8 { animation-delay: 0.8s; }
+
+        /* === SCROLL REVEAL === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.85);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-scale.revealed {
+            opacity: 1;
+            transform: scale(1);
+        }
 
         /* === NAVIGATION === */
         nav {
@@ -236,9 +440,18 @@
             right: 0;
             z-index: 50;
             padding: 16px 0;
-            background: rgba(10,12,14,0.85);
-            backdrop-filter: blur(16px);
+            background: rgba(10,12,14,0.6);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(10,12,14,0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--primary);
+            box-shadow: 0 4px 30px rgba(249,115,22,0.15);
+            padding: 12px 0;
         }
 
         nav .container {
@@ -256,6 +469,11 @@
             color: var(--text);
             text-decoration: none;
             letter-spacing: -0.5px;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo-icon {
@@ -268,6 +486,7 @@
             justify-content: center;
             color: white;
             box-shadow: 0 4px 20px var(--primary-glow);
+            animation: borderGlow 3s ease-in-out infinite;
         }
 
         .nav-links {
@@ -282,7 +501,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: color 0.3s;
+            transition: all 0.3s;
             position: relative;
         }
 
@@ -297,22 +516,111 @@
             transition: width 0.3s;
         }
 
-        .nav-links a:hover { color: var(--text); }
-        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
 
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .hero-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary-light);
+            border: 1px solid var(--primary);
+            border-radius: 50px;
+            margin-bottom: 24px;
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+
+        .hero-badge span {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text2);
+            margin-bottom: 40px;
+            max-width: 520px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 56px;
+        }
+
+        /* === MAGNETIC BUTTONS === */
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 14px 28px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 0.95rem;
             text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
             border: none;
-            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
@@ -322,7 +630,7 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 8px 30px var(--primary-glow);
         }
 
@@ -334,76 +642,8 @@
 
         .btn-secondary:hover {
             border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        /* === HERO === */
-        .hero {
-            overflow: visible;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 140px 0 100px;
-            position: relative;
-        }
-
-        .hero-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-
-        .hero-content {
-            max-width: 600px;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: var(--primary-light);
-            border: 1px solid rgba(249,115,22,0.3);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 28px;
-            letter-spacing: 0.5px;
-        }
-
-        .badge i {
-            color: var(--primary);
-        }
-
-        .hero h1 {
-            font-weight: 800;
-            font-size: clamp(3.5rem, 8vw, 5.5rem);
-            line-height: 1;
-            letter-spacing: -3px;
-            margin-bottom: 28px;
-        }
-
-        .hero h1 .highlight {
-            background: linear-gradient(135deg, var(--primary), #fb923c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text2);
-            margin-bottom: 36px;
-            line-height: 1.7;
-            max-width: 520px;
-        }
-
-        .hero-ctas {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 56px;
+            transform: translateY(-3px);
         }
 
         .hero-stats {
@@ -442,6 +682,7 @@
             padding: 24px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.5);
             position: relative;
+            animation: borderGlow 4s ease-in-out infinite;
         }
 
         .hero-dashboard::before {
@@ -595,47 +836,92 @@
             font-size: 0.65rem;
             font-weight: 600;
             color: white;
+            width: 0%;
+            animation: ganttFill 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .mini-bar-fill.orange { background: var(--primary); }
-        .mini-bar-fill.green { background: var(--accent); }
-        .mini-bar-fill.blue { background: #3b82f6; }
+        .mini-bar-fill.orange { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
+        .mini-bar-fill.green { background: linear-gradient(90deg, var(--accent), #16a34a); }
+        .mini-bar-fill.blue { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
 
-        .mini-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .mini-bar:nth-child(2) .mini-bar-fill { animation-delay: 0.3s; }
+        .mini-bar:nth-child(3) .mini-bar-fill { animation-delay: 0.6s; }
+        .mini-bar:nth-child(4) .mini-bar-fill { animation-delay: 0.9s; }
+        .mini-bar:nth-child(5) .mini-bar-fill { animation-delay: 1.2s; }
+
+        /* === ANIMATED CONIC BORDER CARD === */
+        .conic-card {
+            position: relative;
+            border-radius: 16px;
+            padding: 1px;
+            background: conic-gradient(from var(--angle, 0deg), var(--primary), var(--accent), var(--primary));
+            animation: conicRotate 8s linear infinite;
+        }
+
+        .conic-card::before {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: var(--surface);
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        @keyframes conicRotate {
+            from { --angle: 0deg; }
+            to { --angle: 360deg; }
+        }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        /* === MARQUEE TICKER === */
+        .marquee-section {
+            padding: 20px 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 60px;
+            padding-right: 60px;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
             gap: 12px;
-        }
-
-        .mini-metric {
-            background: var(--bg);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .mini-metric .value {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text2);
+            white-space: nowrap;
         }
 
-        .mini-metric .value.orange { color: var(--primary); }
-        .mini-metric .value.green { color: var(--accent); }
-        .mini-metric .value.warning { color: var(--warning); }
-
-        .mini-metric .label {
-            font-size: 0.65rem;
-            color: var(--text3);
-            margin-top: 4px;
-            text-transform: uppercase;
+        .marquee-item .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
         }
 
-        /* === SECTION STRUCTURE === */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-            margin: 0;
+        .marquee-item.green .dot { background: var(--accent); }
+
+        /* === FEATURES SECTION === */
+        .features {
+            padding: 140px 0;
+            position: relative;
         }
 
         .section-label {
@@ -643,114 +929,30 @@
             font-size: 0.8rem;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-label::before {
-            content: '';
-            width: 40px;
-            height: 2px;
-            background: var(--primary);
         }
 
         .section-title {
+            font-size: 3rem;
             font-weight: 800;
-            font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: -1px;
-            margin-bottom: 64px;
-        }
-
-        /* === PAIN POINTS === */
-        .pain-points {
-            padding: 120px 0;
-            background: var(--bg-alt);
-            position: relative;
-        }
-
-        .pain-points::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        .pain-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .pain-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pain-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--danger);
-        }
-
-        .pain-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .pain-problem {
-            color: var(--danger);
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-        }
-
-        .pain-arrow {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
-        .pain-solution {
-            color: var(--text2);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* === FEATURES === */
-        .features {
-            padding: 120px 0;
+            margin-bottom: 60px;
+            letter-spacing: -0.5px;
+            max-width: 600px;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 32px;
         }
 
         .feature-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            transition: all 0.3s;
+            border-radius: 16px;
+            padding: 36px 28px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
@@ -760,144 +962,82 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 0;
-            height: 100%;
-            background: var(--primary-light);
-            transition: width 0.3s;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
         }
 
         .feature-card:hover {
+            transform: translateY(-8px);
             border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(249,115,22,0.2), 0 0 30px rgba(249,115,22,0.1);
         }
 
         .feature-card:hover::before {
-            width: 4px;
+            transform: scaleX(1);
         }
 
         .feature-icon {
-            width: 52px;
-            height: 52px;
+            width: 60px;
+            height: 60px;
             background: var(--primary-light);
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
         }
 
         .feature-card h3 {
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
         }
 
         .feature-card p {
             color: var(--text2);
             font-size: 0.95rem;
-            position: relative;
-            z-index: 1;
+            line-height: 1.7;
         }
 
-        /* === HOW IT WORKS === */
-        .how-it-works {
-            padding: 120px 0;
+        /* === DASHBOARD PREVIEW SECTION === */
+        .dashboard-preview {
+            padding: 140px 0;
             background: var(--bg-alt);
             position: relative;
         }
 
-        .how-it-works::before {
+        .dashboard-preview::before,
+        .dashboard-preview::after {
             content: '';
             position: absolute;
-            top: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--border), transparent);
         }
 
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 32px;
-            position: relative;
-        }
-
-        .steps::before {
-            content: '';
-            position: absolute;
-            top: 44px;
-            left: 12%;
-            right: 12%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            z-index: 0;
-            border-radius: 2px;
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-number {
-            width: 88px;
-            height: 88px;
-            background: var(--surface);
-            border: 3px solid var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin: 0 auto 24px;
-            box-shadow: 0 0 30px var(--primary-light);
-        }
-
-        .step h3 {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .step p {
-            color: var(--text2);
-            font-size: 0.9rem;
-        }
-
-        /* === DASHBOARD PREVIEW === */
-        .dashboard-preview {
-            padding: 120px 0;
-            position: relative;
-        }
-
-        .dashboard-preview::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
+        .dashboard-preview::before { top: 0; }
+        .dashboard-preview::after { bottom: 0; }
 
         .dashboard-mockup {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 28px;
-            margin-top: 48px;
+            border-radius: 16px;
+            padding: 32px;
             box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+            animation: borderGlow 4s ease-in-out infinite;
         }
 
         .dashboard-header {
@@ -993,44 +1133,65 @@
             font-size: 0.75rem;
             font-weight: 600;
             color: white;
+            width: 0%;
+            animation: ganttFill 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.5s;
         }
 
         .gantt-fill.orange { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
         .gantt-fill.green { background: linear-gradient(90deg, var(--accent), #16a34a); }
-        .gantt-fill.blue { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .gantt-fill.blue { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
 
-        .progress-section {
-            margin-top: 28px;
+        .gantt-bar:nth-child(2) .gantt-fill { animation-delay: 0.7s; }
+        .gantt-bar:nth-child(3) .gantt-fill { animation-delay: 0.9s; }
+        .gantt-bar:nth-child(4) .gantt-fill { animation-delay: 1.1s; }
+
+        .progress-section h4 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin: 24px 0 16px;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .progress-item {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+            margin-bottom: 8px;
         }
 
-        .progress-label { color: var(--text2); }
-        .progress-value { color: var(--text); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text3);
+        }
+
+        .progress-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text2);
+        }
 
         .progress-bar {
-            height: 10px;
+            height: 8px;
             background: var(--border);
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            border-radius: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            width: 0%;
+            animation: progressFill 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 1.3s;
         }
-
-        .progress-fill.green { background: linear-gradient(90deg, var(--accent), #16a34a); }
 
         .dashboard-sidebar {
             display: flex;
@@ -1041,24 +1202,15 @@
         .metric-card {
             background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 20px;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
         }
 
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--primary);
+        .metric-card:hover {
+            border-color: var(--primary);
+            transform: translateX(-4px);
         }
-
-        .metric-card.green::before { background: var(--accent); }
-        .metric-card.warning::before { background: var(--warning); }
 
         .metric-label {
             font-size: 0.75rem;
@@ -1070,28 +1222,27 @@
 
         .metric-value {
             font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
             font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            animation: countGlow 3s ease-in-out infinite;
         }
 
-        .metric-value.orange { color: var(--primary); }
         .metric-value.green { color: var(--accent); }
         .metric-value.warning { color: var(--warning); }
+        .metric-value.orange { color: var(--primary); }
 
         .metric-change {
             font-size: 0.75rem;
             color: var(--accent);
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
-        .metric-change.warning {
-            color: var(--warning);
-        }
+        .metric-change.warning { color: var(--warning); }
 
-        /* === MODULES === */
+        /* === MODULES SECTION === */
         .modules {
-            padding: 120px 0;
-            background: var(--bg-alt);
+            padding: 140px 0;
             position: relative;
         }
 
@@ -1116,7 +1267,7 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 28px 24px;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
@@ -1134,9 +1285,9 @@
         }
 
         .module-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-8px);
             border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(249,115,22,0.15);
+            box-shadow: 0 20px 50px rgba(249,115,22,0.2), 0 0 30px rgba(249,115,22,0.1);
         }
 
         .module-card:hover::before {
@@ -1153,6 +1304,13 @@
             justify-content: center;
             color: var(--primary);
             margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover .module-icon {
+            transform: scale(1.1) rotate(-5deg);
+            background: var(--primary);
+            color: white;
         }
 
         .module-card h3 {
@@ -1178,6 +1336,7 @@
             border-radius: 50px;
             margin-bottom: 48px;
             box-shadow: 0 0 30px var(--primary-light);
+            animation: borderGlow 2s ease-in-out infinite;
         }
 
         .meta-badge .icon {
@@ -1197,27 +1356,82 @@
             color: var(--primary);
         }
 
-        /* === PRICING === */
-        .pricing {
-            padding: 120px 0;
+        /* === HOW IT WORKS === */
+        .how-it-works {
+            padding: 140px 0;
+            background: var(--bg-alt);
             position: relative;
         }
 
-        .pricing::before {
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            position: relative;
+        }
+
+        .steps-grid::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0.3;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 30px var(--primary-glow);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .step:hover .step-number {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px var(--primary-glow);
+        }
+
+        .step h3 {
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            color: var(--text2);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* === PRICING SECTION === */
+        .pricing {
+            padding: 140px 0;
+            position: relative;
         }
 
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 48px;
+            gap: 32px;
         }
 
         .pricing-card {
@@ -1225,39 +1439,54 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 40px 32px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--primary-glow), transparent 30%);
+            animation: conicRotate 6s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
         }
 
         .pricing-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            transform: translateY(-10px);
+            border-color: var(--primary);
         }
 
         .pricing-card.popular {
             border-color: var(--primary);
-            background: linear-gradient(180deg, rgba(249,115,22,0.08) 0%, var(--surface) 40%);
-            transform: scale(1.02);
+            animation: breathingGlow 3s ease-in-out infinite;
         }
 
-        .pricing-card.popular:hover {
-            transform: scale(1.02) translateY(-8px);
+        .pricing-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .popular-badge {
             position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 20px;
+            right: 20px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 8px 24px;
-            border-radius: 50px;
+            padding: 6px 16px;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 20px var(--primary-glow);
         }
 
         .pricing-name {
@@ -1317,11 +1546,81 @@
             justify-content: center;
         }
 
-        /* === TESTIMONIALS === */
-        .testimonials {
-            padding: 120px 0;
+        /* === FAQ SECTION === */
+        .faq {
+            padding: 140px 0;
             background: var(--bg-alt);
             position: relative;
+        }
+
+        .faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px 28px;
+            background: var(--surface);
+            border: none;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question .icon {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-item.active .faq-question .icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-answer-inner {
+            padding: 0 28px 24px;
+            color: var(--text2);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+
+        /* === TESTIMONIALS === */
+        .testimonials {
+            padding: 140px 0;
+            background: var(--bg-alt);
+            position: relative;
+            overflow: hidden;
         }
 
         .testimonials::before {
@@ -1332,6 +1631,17 @@
             right: 0;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .testimonials-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-track {
+            display: flex;
+            gap: 24px;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .testimonials-grid {
@@ -1346,6 +1656,13 @@
             border-radius: 16px;
             padding: 32px;
             position: relative;
+            transition: all 0.4s;
+        }
+
+        .testimonial-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(249,115,22,0.15);
         }
 
         .testimonial-quote {
@@ -1397,109 +1714,76 @@
             color: var(--text3);
         }
 
-        /* === FAQ === */
-        .faq {
-            padding: 120px 0;
-            position: relative;
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
         }
 
-        .faq::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        .faq-list {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        details {
+        .carousel-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 16px;
-            overflow: hidden;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        details:hover {
+        .carousel-btn:hover {
+            background: var(--primary);
             border-color: var(--primary);
+            color: white;
         }
 
-        summary {
-            padding: 20px 24px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            list-style: none;
-            font-size: 1rem;
-        }
-
-        summary::-webkit-details-marker { display: none; }
-
-        summary::after {
-            content: '+';
-            font-size: 1.5rem;
-            color: var(--primary);
-            transition: transform 0.3s;
-            font-weight: 300;
-        }
-
-        details[open] summary::after {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            padding: 0 24px 24px;
-            color: var(--text2);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        /* === FINAL CTA === */
-        .final-cta {
+        /* === CTA SECTION === */
+        .cta-section {
             padding: 140px 0;
-            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+            position: relative;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+            border: 1px solid var(--primary);
+            border-radius: 24px;
+            padding: 80px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            animation: borderGlow 3s ease-in-out infinite;
         }
 
-        .final-cta::before {
+        .cta-box::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            bottom: 0;
+            background: radial-gradient(ellipse at center, var(--primary-glow) 0%, transparent 70%);
+            opacity: 0.1;
         }
 
-        .final-cta h2 {
+        .cta-box h2 {
+            font-size: 2.8rem;
             font-weight: 800;
-            font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: -1px;
             margin-bottom: 20px;
+            position: relative;
         }
 
-        .final-cta p {
-            color: var(--text2);
+        .cta-box p {
             font-size: 1.1rem;
+            color: var(--text2);
             margin-bottom: 40px;
-        }
-
-        .final-cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
         }
 
         /* === FOOTER === */
@@ -1601,55 +1885,69 @@
             }
 
             .features-grid,
-            .pain-grid {
+            .modules-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .modules-grid {
+            .steps-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+
+            .steps-grid::before {
+                display: none;
             }
 
             .pricing-grid {
                 grid-template-columns: 1fr;
                 max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .pricing-card.popular {
-                transform: none;
+                margin: 0 auto;
             }
 
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
 
-            .steps {
+            .footer-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 40px;
-            }
-
-            .steps::before {
-                display: none;
             }
         }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero { padding: 120px 0 80px; }
-            .hero h1 { letter-spacing: -1px; }
-            .hero-stats { flex-direction: column; gap: 32px; }
-            .hero-ctas { flex-direction: column; }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
             .features-grid,
-            .pain-grid,
-            .modules-grid {
+            .modules-grid,
+            .steps-grid {
                 grid-template-columns: 1fr;
             }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .steps { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            .footer-bottom { flex-direction: column; gap: 16px; }
-            .testimonials-grid { grid-template-columns: 1fr; }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-box {
+                padding: 40px 24px;
+            }
+
+            .cta-box h2 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -1657,11 +1955,21 @@
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Particle System -->
+    <div class="particles-container" id="particles"></div>
+
     <!-- Background Layers -->
     <div class="grid-bg"></div>
-    <div class="ambient-stripes"></div>
     <div class="radial-glow"></div>
+    <div class="ambient-stripes"></div>
+
+    <!-- Geometric Floating Shapes -->
     <div class="geo-shapes">
+        <div class="geo-shape"></div>
+        <div class="geo-shape"></div>
         <div class="geo-shape"></div>
         <div class="geo-shape"></div>
         <div class="geo-shape"></div>
@@ -1671,7 +1979,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav>
+    <nav id="navbar">
         <div class="container">
             <a href="#" class="logo">
                 <div class="logo-icon">
@@ -1684,8 +1992,8 @@
                 <li><a href="#modulos">Módulos</a></li>
                 <li><a href="#pricing">Planes</a></li>
                 <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact" class="btn btn-primary">Solicitar Demo</a></li>
             </ul>
-            <a href="#contact" class="btn btn-primary">Solicitar Demo</a>
         </div>
     </nav>
 
@@ -1694,58 +2002,63 @@
         <div class="container">
             <div class="hero-wrapper">
                 <div class="hero-content">
-                    <div class="badge fade-in-up">
-                        <i data-lucide="construction" style="width: 16px; height: 16px;"></i>
-                        Construction Management Platform
+                    <div class="hero-badge fade-in-up delay-1">
+                        <span>🎯 Construction Management Platform</span>
                     </div>
-                    <h1 class="fade-in-up delay-1">Gestión de Obras con <span class="highlight">Control Total</span></h1>
-                    <p class="hero-subtitle fade-in-up delay-2">La plataforma de project management que conecta terreno y oficina. Avance en tiempo real, costos controlados, equipos coordinados.</p>
-                    <div class="hero-ctas fade-in-up delay-3">
-                        <a href="#contact" class="btn btn-primary">Comenzar Ahora</a>
-                        <a href="#modulos" class="btn btn-secondary">Ver Módulos</a>
+                    <h1 class="fade-in-up delay-2">
+                        Gestión de obras<br>
+                        <span class="highlight">sin improvisation</span>
+                    </h1>
+                    <p class="fade-in-up delay-3">
+                        Control total de avance, costos, recursos y documentación en tiempo real. La plataforma que necesita tu constructora.
+                    </p>
+                    <div class="hero-ctas fade-in-up delay-4">
+                        <a href="#contact" class="btn btn-primary magnetic-btn">
+                            Comenzar Gratis
+                            <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                        </a>
+                        <a href="#funcionalidades" class="btn btn-secondary">
+                            Ver Demo
+                        </a>
                     </div>
-                    <div class="hero-stats fade-in-up delay-4">
-                        <div class="stat observe-count">
-                            <div class="stat-number count-up" data-target="2500">0</div>
-                            <div class="stat-label">proyectos gestionados</div>
+                    <div class="hero-stats fade-in-up delay-5">
+                        <div class="stat">
+                            <div class="stat-number count-up" data-target="150">0+</div>
+                            <div class="stat-label">Obras gestionadas</div>
                         </div>
-                        <div class="stat observe-count">
-                            <div class="stat-number count-up" data-target="12000">0</div>
-                            <div class="stat-label">usuarios activos</div>
+                        <div class="stat">
+                            <div class="stat-number count-up" data-target="30">0%</div>
+                            <div class="stat-label">Reducción sobrecostos</div>
                         </div>
-                        <div class="stat observe-count">
-                            <div class="stat-number count-up" data-target="35">0</div>
-                            <div class="stat-label">% reducción de retrasos</div>
+                        <div class="stat">
+                            <div class="stat-number count-up" data-target="98">0%</div>
+                            <div class="stat-label">Satisfacción cliente</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Hero Dashboard Mockup -->
-                <div class="hero-dashboard slide-in-right delay-2">
+                <div class="hero-dashboard fade-in-up delay-3">
                     <div class="dashboard-top-bar">
-                        <div class="dashboard-title">
+                        <span class="dashboard-title">
                             <span class="dot"></span>
-                            Sistema de Control de Obras
-                        </div>
+                            // PANEL DE CONTROL — TORRE NORTE
+                        </span>
                         <div class="status-pills">
-                            <span class="status-pill active">5 Obras Activas</span>
-                            <span class="status-pill warning">2 Con Alertas</span>
+                            <span class="status-pill active">En curso</span>
+                            <span class="status-pill warning">3 alertas</span>
                         </div>
                     </div>
-
                     <div class="project-indicator">
                         <div class="icon">
-                            <i data-lucide="building-2" style="width: 20px; height: 20px;"></i>
+                            <i data-lucide="building-2" style="width: 18px; height: 18px;"></i>
                         </div>
                         <div class="info">
                             <div class="name">Torre Norte — Etapa 3</div>
-                            <div class="meta">Meta: 60 días restantes</div>
+                            <div class="meta">Avance general: 67% • ETA: 45 días</div>
                         </div>
-                        <div class="badge-mini">En Curso</div>
+                        <span class="badge-mini">VIP</span>
                     </div>
-
                     <div class="mini-gantt">
-                        <h4>Cronograma de Avance</h4>
+                        <h4>Cronograma de avance</h4>
                         <div class="mini-bar">
                             <span class="mini-bar-label">Cimentación</span>
                             <div class="mini-bar-track">
@@ -1771,139 +2084,84 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="mini-metrics">
-                        <div class="mini-metric">
-                            <div class="value orange">$8.2M</div>
-                            <div class="label">Ejecutado</div>
-                        </div>
-                        <div class="mini-metric">
-                            <div class="value green">+12.4%</div>
-                            <div class="label">ROI</div>
-                        </div>
-                        <div class="mini-metric">
-                            <div class="value warning">47</div>
-                            <div class="label">Días Rest.</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pain Points Section -->
-    <section class="pain-points">
-        <div class="container">
-            <div class="section-label fade-in">Problemas Comunes</div>
-            <h2 class="section-title fade-in">¿Te identificas con alguno?</h2>
-            <div class="pain-grid">
-                <div class="pain-card fade-in-up delay-1">
-                    <div class="pain-problem">
-                        <i data-lucide="clock" style="width: 18px; height: 18px;"></i>
-                        "Los reportes de avance llegan tarde"
-                    </div>
-                    <div class="pain-arrow">→</div>
-                    <div class="pain-solution">Dashboard en tiempo real con actualización instantánea</div>
-                </div>
-                <div class="pain-card fade-in-up delay-2">
-                    <div class="pain-problem">
-                        <i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
-                        "No hay visibilidad entre obras"
-                    </div>
-                    <div class="pain-arrow">→</div>
-                    <div class="pain-solution">Multi-proyecto en una sola plataforma</div>
-                </div>
-                <div class="pain-card fade-in-up delay-3">
-                    <div class="pain-problem">
-                        <i data-lucide="file-x" style="width: 18px; height: 18px;"></i>
-                        "La documentación se pierde"
-                    </div>
-                    <div class="pain-arrow">→</div>
-                    <div class="pain-solution">Gestión documental centralizada y trazable</div>
-                </div>
+    <!-- Marquee Ticker -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <div class="marquee-item"><span class="dot"></span>Control de avance en tiempo real</div>
+                <div class="marquee-item green"><span class="dot"></span>Gestión de costos y presupuesto</div>
+                <div class="marquee-item"><span class="dot"></span>Documentación digital centralizada</div>
+                <div class="marquee-item green"><span class="dot"></span>Reporting automatizado</div>
+                <div class="marquee-item"><span class="dot"></span>Integración con sistemas ERP</div>
+                <div class="marquee-item green"><span class="dot"></span>Soporte 24/7 disponible</div>
+                <div class="marquee-item"><span class="dot"></span>App móvil para terreno</div>
+                <div class="marquee-item green"><span class="dot"></span>Alertas inteligentes</div>
+            </div>
+            <div class="marquee-content">
+                <div class="marquee-item"><span class="dot"></span>Control de avance en tiempo real</div>
+                <div class="marquee-item green"><span class="dot"></span>Gestión de costos y presupuesto</div>
+                <div class="marquee-item"><span class="dot"></span>Documentación digital centralizada</div>
+                <div class="marquee-item green"><span class="dot"></span>Reporting automatizado</div>
+                <div class="marquee-item"><span class="dot"></span>Integración con sistemas ERP</div>
+                <div class="marquee-item green"><span class="dot"></span>Soporte 24/7 disponible</div>
+                <div class="marquee-item"><span class="dot"></span>App móvil para terreno</div>
+                <div class="marquee-item green"><span class="dot"></span>Alertas inteligentes</div>
             </div>
         </div>
-    </section>
-
-    <div class="section-divider"></div>
+    </div>
 
     <!-- Features Section -->
     <section class="features" id="funcionalidades">
         <div class="container">
-            <div class="section-label fade-in">Funcionalidades</div>
-            <h2 class="section-title fade-in">Todo lo que necesitas para gestionar obras</h2>
+            <div class="section-label reveal">Funcionalidades</div>
+            <h2 class="section-title reveal">Todo lo que necesitas<br>en una sola plataforma</h2>
             <div class="features-grid">
-                <div class="feature-card fade-in-up delay-1">
+                <div class="feature-card reveal" style="transition-delay: 0.1s;">
                     <div class="feature-icon">
-                        <i data-lucide="trending-up" style="width: 24px; height: 24px;"></i>
+                        <i data-lucide="gantt-chart" style="width: 28px; height: 28px;"></i>
                     </div>
                     <h3>Control de Avance</h3>
-                    <p>Seguimiento obra por obra con métricas de avance físico y financiero en tiempo real.</p>
+                    <p>Seguimiento en tiempo real del progreso de cada actividad. Fotografías geolocalizadas y reportes instantáneos.</p>
                 </div>
-                <div class="feature-card fade-in-up delay-2">
+                <div class="feature-card reveal" style="transition-delay: 0.2s;">
                     <div class="feature-icon">
-                        <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+                        <i data-lucide="wallet" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <h3>Gestión de Costos</h3>
+                    <p>Control total de presupuesto, certificaciones, redeterminaciones y flujo de pagos. Sin sorpresas.</p>
+                </div>
+                <div class="feature-card reveal" style="transition-delay: 0.3s;">
+                    <div class="feature-icon">
+                        <i data-lucide="users" style="width: 28px; height: 28px;"></i>
                     </div>
                     <h3>Gestión de Recursos</h3>
-                    <p>Asignación de equipos, materiales y personal con visión de capacidad.</p>
+                    <p>Asigna personal, equipos y materiales de forma eficiente. Optimiza la productividad de tu equipo.</p>
                 </div>
-                <div class="feature-card fade-in-up delay-3">
+                <div class="feature-card reveal" style="transition-delay: 0.4s;">
                     <div class="feature-icon">
-                        <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+                        <i data-lucide="file-text" style="width: 28px; height: 28px;"></i>
                     </div>
-                    <h3>Documentación Digital</h3>
-                    <p>Planos, contratos y actas digitalizados con versioning y aprobación online.</p>
+                    <h3>Documentación</h3>
+                    <p>Archivos, planos, contratos y memorias técnicas centralizadas. Acceso instantáneo desde cualquier lugar.</p>
                 </div>
-                <div class="feature-card fade-in-up delay-4">
+                <div class="feature-card reveal" style="transition-delay: 0.5s;">
                     <div class="feature-icon">
-                        <i data-lucide="wallet" style="width: 24px; height: 24px;"></i>
+                        <i data-lucide="bell" style="width: 28px; height: 28px;"></i>
                     </div>
-                    <h3>Control de Costos</h3>
-                    <p>Presupuesto vs. real, variaciones y alertas de sobrecosto automáticas.</p>
+                    <h3>Alertas Inteligentes</h3>
+                    <p>Notificaciones automáticas sobre desviaciones, sobrecostos y fechas límite. Actúa antes de que sea tarde.</p>
                 </div>
-                <div class="feature-card fade-in-up delay-5">
+                <div class="feature-card reveal" style="transition-delay: 0.6s;">
                     <div class="feature-icon">
-                        <i data-lucide="bar-chart-3" style="width: 24px; height: 24px;"></i>
+                        <i data-lucide="bar-chart-3" style="width: 28px; height: 28px;"></i>
                     </div>
-                    <h3>Reporting Ejecutivo</h3>
-                    <p>Dashboards para gerencia con KPIs de obra actualizados al instante.</p>
-                </div>
-                <div class="feature-card fade-in-up delay-6">
-                    <div class="feature-icon">
-                        <i data-lucide="plug" style="width: 24px; height: 24px;"></i>
-                    </div>
-                    <h3>Integraciones</h3>
-                    <p>Conexión con sistemas ERP, SAP y herramientas de productividad.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works">
-        <div class="container">
-            <div class="section-label fade-in">Cómo Funciona</div>
-            <h2 class="section-title fade-in">Implementación en días, no meses</h2>
-            <div class="steps">
-                <div class="step fade-in-up delay-1">
-                    <div class="step-number">1</div>
-                    <h3>Configura tu obra</h3>
-                    <p>Define estructura, presupuesto y equipo en minutos.</p>
-                </div>
-                <div class="step fade-in-up delay-2">
-                    <div class="step-number">2</div>
-                    <h3>Equipos en terreno</h3>
-                    <p>Trabajadores registran avance desde cualquier dispositivo.</p>
-                </div>
-                <div class="step fade-in-up delay-3">
-                    <div class="step-number">3</div>
-                    <h3>Datos en tiempo real</h3>
-                    <p>Oficina y terreno conectados con información sincronizada.</p>
-                </div>
-                <div class="step fade-in-up delay-4">
-                    <div class="step-number">4</div>
-                    <h3>Reportes automáticos</h3>
-                    <p>Genera informes de avance, costos y recursos al instante.</p>
+                    <h3>Reporting Avanzado</h3>
+                    <p>Dashboards personalizados y reportes automáticos para la toma de decisiones basada en datos.</p>
                 </div>
             </div>
         </div>
@@ -1912,9 +2170,9 @@
     <!-- Dashboard Preview Section -->
     <section class="dashboard-preview">
         <div class="container">
-            <div class="section-label fade-in">Vista Previa</div>
-            <h2 class="section-title fade-in">Tu panel de control, en cualquier momento</h2>
-            <div class="dashboard-mockup fade-in-up">
+            <div class="section-label reveal">Vista Previa</div>
+            <h2 class="section-title reveal">Tu panel de control, en cualquier momento</h2>
+            <div class="dashboard-mockup reveal-scale">
                 <div class="dashboard-header">
                     <span class="dashboard-title">// DASHBOARD DE OBRA — TORRE NORTE</span>
                     <div class="dashboard-tabs">
@@ -1933,25 +2191,25 @@
                             <div class="gantt-bar">
                                 <span class="gantt-label">Cimentación</span>
                                 <div class="gantt-track">
-                                    <div class="gantt-fill orange" style="width: 100%;">100% — Completado</div>
+                                    <div class="gantt-fill orange" style="">100% — Completado</div>
                                 </div>
                             </div>
                             <div class="gantt-bar">
                                 <span class="gantt-label">Estructura</span>
                                 <div class="gantt-track">
-                                    <div class="gantt-fill orange" style="width: 78%;">78% — En curso</div>
+                                    <div class="gantt-fill orange" style="">78% — En curso</div>
                                 </div>
                             </div>
                             <div class="gantt-bar">
                                 <span class="gantt-label">Instalaciones</span>
                                 <div class="gantt-track">
-                                    <div class="gantt-fill green" style="width: 45%;">45% — En curso</div>
+                                    <div class="gantt-fill green" style="">45% — En curso</div>
                                 </div>
                             </div>
                             <div class="gantt-bar">
                                 <span class="gantt-label">Acabados</span>
                                 <div class="gantt-track">
-                                    <div class="gantt-fill blue" style="width: 12%;">12% — Pendiente</div>
+                                    <div class="gantt-fill blue" style="">12% — Pendiente</div>
                                 </div>
                             </div>
                         </div>
@@ -1966,7 +2224,7 @@
                                     <span class="progress-value">$8.2M / $12.5M</span>
                                 </div>
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 65.6%;"></div>
+                                    <div class="progress-fill" style=""></div>
                                 </div>
                             </div>
                             <div class="progress-item">
@@ -1975,31 +2233,31 @@
                                     <span class="progress-value">$7.8M</span>
                                 </div>
                                 <div class="progress-bar">
-                                    <div class="progress-fill green" style="width: 62.4%;"></div>
+                                    <div class="progress-fill green" style=""></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="dashboard-sidebar">
-                        <div class="metric-card warning">
+                        <div class="metric-card warning reveal-right" style="transition-delay: 0.1s;">
                             <div class="metric-label">Días restantes</div>
                             <div class="metric-value warning">47</div>
                             <div class="metric-change warning">↑ 3 días vs. plan</div>
                         </div>
-                        <div class="metric-card green">
+                        <div class="metric-card green reveal-right" style="transition-delay: 0.2s;">
                             <div class="metric-label">ROI del proyecto</div>
                             <div class="metric-value green">+12.4%</div>
                             <div class="metric-change">↑ Sobre presupuesto</div>
                         </div>
-                        <div class="metric-card">
+                        <div class="metric-card reveal-right" style="transition-delay: 0.3s;">
                             <div class="metric-label">Alertas activas</div>
                             <div class="metric-value orange">3</div>
                             <div class="metric-change warning">Revisar sobrecostos</div>
                         </div>
-                        <div class="metric-card green">
-                            <div class="metric-label">Personal en obra</div>
-                            <div class="metric-value green">84</div>
-                            <div class="metric-change">de 100 planificados</div>
+                        <div class="metric-card green reveal-right" style="transition-delay: 0.4s;">
+                            <div class="metric-label">Cumplimiento</div>
+                            <div class="metric-value green">94%</div>
+                            <div class="metric-change">↑ 2% vs. mes anterior</div>
                         </div>
                     </div>
                 </div>
@@ -2007,47 +2265,97 @@
         </div>
     </section>
 
-    <div class="section-divider"></div>
-
     <!-- Modules Section -->
     <section class="modules" id="modulos">
         <div class="container">
-            <div class="section-label fade-in">Módulos</div>
-            <h2 class="section-title fade-in">Soluciones modulares para cada necesidad</h2>
-            <div class="meta-badge fade-in">
-                <div class="icon">
-                    <i data-lucide="target" style="width: 14px; height: 14px;"></i>
-                </div>
-                <span class="text">Meta: 60 días — Entrega Etapa 3</span>
-            </div>
+            <div class="section-label reveal">Módulos</div>
+            <h2 class="section-title reveal">Soluciones para cada necesidad</h2>
             <div class="modules-grid">
-                <div class="module-card fade-in-up delay-1">
+                <div class="module-card reveal" style="transition-delay: 0.1s;">
                     <div class="module-icon">
-                        <i data-lucide="kanban" style="width: 26px; height: 26px;"></i>
+                        <i data-lucide="hard-hat" style="width: 26px; height: 26px;"></i>
                     </div>
-                    <h3>Project Control</h3>
-                    <p>Control integral de obra con métricas de avance y costo.</p>
+                    <h3>Gestión de Obras</h3>
+                    <p>Control completo del ciclo de vida de cada proyecto constructivo.</p>
                 </div>
-                <div class="module-card fade-in-up delay-2">
-                    <div class="module-icon">
-                        <i data-lucide="truck" style="width: 26px; height: 26px;"></i>
-                    </div>
-                    <h3>Resource Management</h3>
-                    <p>Gestión de equipos, materiales y personal de construcción.</p>
-                </div>
-                <div class="module-card fade-in-up delay-3">
-                    <div class="module-icon">
-                        <i data-lucide="files" style="width: 26px; height: 26px;"></i>
-                    </div>
-                    <h3>Document Management</h3>
-                    <p>Biblioteca digital con planos, contratos y especificaciones.</p>
-                </div>
-                <div class="module-card fade-in-up delay-4">
+                <div class="module-card reveal" style="transition-delay: 0.2s;">
                     <div class="module-icon">
                         <i data-lucide="calculator" style="width: 26px; height: 26px;"></i>
                     </div>
-                    <h3>Financial Control</h3>
+                    <h3>Control de Costos</h3>
                     <p>Presupuesto, certificaciones, redeterminaciones y control de pagos.</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.3s;">
+                    <div class="module-icon">
+                        <i data-lucide="users" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>RRHH y Productividad</h3>
+                    <p>Gestión de equipos, turnos, rendimientos y liquidaciones.</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.4s;">
+                    <div class="module-icon">
+                        <i data-lucide="package" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>Logística y Materiales</h3>
+                    <p>Control de entradas, salidas, almacenes y inventarios.</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.5s;">
+                    <div class="module-icon">
+                        <i data-lucide="file-check" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>Calidad y Seguridad</h3>
+                    <p>Inspecciones, checklist, incidentes ycompliance.</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.6s;">
+                    <div class="module-icon">
+                        <i data-lucide="message-square" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>Comunicación</h3>
+                    <p>Chat de obra, anotaciones, multipartidas y裙。</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.7s;">
+                    <div class="module-icon">
+                        <i data-lucide="map-pin" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>Geomática</h3>
+                    <p>Planos,ubicaciones, replanteos ycontrol geodésico.</p>
+                </div>
+                <div class="module-card reveal" style="transition-delay: 0.8s;">
+                    <div class="module-icon">
+                        <i data-lucide="database" style="width: 26px; height: 26px;"></i>
+                    </div>
+                    <h3>Business Intelligence</h3>
+                    <p>Dashboards, KPIs, analíticas avanzadas y forecasting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-label reveal">Cómo Funciona</div>
+            <h2 class="section-title reveal">Implementación en 4 pasos</h2>
+            <div class="steps-grid">
+                <div class="step reveal" style="transition-delay: 0.1s;">
+                    <div class="step-number">1</div>
+                    <h3>Configura tu obra</h3>
+                    <p>Define estructura, presupuesto, recursos y cronograma.</p>
+                </div>
+                <div class="step reveal" style="transition-delay: 0.2s;">
+                    <div class="step-number">2</div>
+                    <h3>Invita a tu equipo</h3>
+                    <p>Agrega usuarios con roles específicos y permisos.</p>
+                </div>
+                <div class="step reveal" style="transition-delay: 0.3s;">
+                    <div class="step-number">3</div>
+                    <h3>Datos en tiempo real</h3>
+                    <p>Oficina y terreno conectados con información sincronizada.</p>
+                </div>
+                <div class="step reveal" style="transition-delay: 0.4s;">
+                    <div class="step-number">4</div>
+                    <h3>Reportes automáticos</h3>
+                    <p>Genera informes de avance, costos y recursos al instante.</p>
                 </div>
             </div>
         </div>
@@ -2056,10 +2364,10 @@
     <!-- Pricing Section -->
     <section class="pricing" id="pricing">
         <div class="container">
-            <div class="section-label fade-in">Planes</div>
-            <h2 class="section-title fade-in">Precios simples y transparentes</h2>
+            <div class="section-label reveal">Planes</div>
+            <h2 class="section-title reveal">Precios simples y transparentes</h2>
             <div class="pricing-grid">
-                <div class="pricing-card fade-in-up delay-1">
+                <div class="pricing-card reveal" style="transition-delay: 0.1s;">
                     <div class="pricing-name">Básico</div>
                     <div class="pricing-desc">Para constructoras pequeñas</div>
                     <div class="pricing-price">
@@ -2073,9 +2381,9 @@
                         <li>Soporte por email</li>
                         <li>App móvil básica</li>
                     </ul>
-                    <a href="#contact" class="btn btn-secondary">Comenzar</a>
+                    <a href="#contact" class="btn btn-secondary magnetic-btn">Comenzar</a>
                 </div>
-                <div class="pricing-card popular fade-in-up delay-2">
+                <div class="pricing-card popular reveal" style="transition-delay: 0.2s;">
                     <div class="popular-badge">Más Popular</div>
                     <div class="pricing-name">Profesional</div>
                     <div class="pricing-desc">Para empresas en crecimiento</div>
@@ -2090,9 +2398,9 @@
                         <li>Reporting avanzado</li>
                         <li>Soporte prioritario</li>
                     </ul>
-                    <a href="#contact" class="btn btn-primary">Solicitar Demo</a>
+                    <a href="#contact" class="btn btn-primary magnetic-btn">Solicitar Demo</a>
                 </div>
-                <div class="pricing-card fade-in-up delay-3">
+                <div class="pricing-card reveal" style="transition-delay: 0.3s;">
                     <div class="pricing-name">Enterprise</div>
                     <div class="pricing-desc">Para grandes constructoras</div>
                     <div class="pricing-price">
@@ -2105,47 +2413,7 @@
                         <li>Integraciones custom</li>
                         <li>Onboarding dedicado</li>
                     </ul>
-                    <a href="#contact" class="btn btn-secondary">Contactar</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-label fade-in">Testimonios</div>
-            <h2 class="section-title fade-in">Lo que dicen nuestros clientes</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card fade-in-up delay-1">
-                    <p class="testimonial-quote">"Infrannova nos dio visibilidad total en 5 obras simultáneas. Redujimos sobrecostos un 30% el primer año."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">ML</div>
-                        <div class="author-info">
-                            <h4>Marcos López</h4>
-                            <p>Director de Obras, Constructora Delta</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card fade-in-up delay-2">
-                    <p class="testimonial-quote">"La documentación digitalizó procesos que nos llevaban días. Ahora es instantáneo."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">CR</div>
-                        <div class="author-info">
-                            <h4>Carolina Ruiz</h4>
-                            <p>PM, Inmobiliaria Norte</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card fade-in-up delay-3">
-                    <p class="testimonial-quote">"El control de costos en tiempo real nos salvó de múltiples sobrecostos. Es indispensable."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">AT</div>
-                        <div class="author-info">
-                            <h4>Andrés Torres</h4>
-                            <p>Gerente, Constructora Andes</p>
-                        </div>
-                    </div>
+                    <a href="#contact" class="btn btn-secondary magnetic-btn">Contactar</a>
                 </div>
             </div>
         </div>
@@ -2154,49 +2422,130 @@
     <!-- FAQ Section -->
     <section class="faq" id="faq">
         <div class="container">
-            <div class="section-label fade-in">FAQ</div>
-            <h2 class="section-title fade-in">Preguntas frecuentes</h2>
-            <div class="faq-list">
-                <details class="fade-in-up delay-1">
-                    <summary>¿Infrannova funciona en obras sin internet?</summary>
-                    <div class="faq-answer">Sí. Modo offline integrado. Los datos se sincronizan cuando hay conexión disponible.</div>
-                </details>
-                <details class="fade-in-up delay-2">
-                    <summary>¿Se integra con SAP o sistemas ERP?</summary>
-                    <div class="faq-answer">Sí. Integración nativa con SAP, Oracle y sistemas de gestión empresarial. API REST disponible.</div>
-                </details>
-                <details class="fade-in-up delay-3">
-                    <summary>¿Cuántas obras puede manejar?</summary>
-                    <div class="faq-answer">Ilimitadas en planes Profesional y Enterprise. Básico hasta 3 obras simultáneas.</div>
-                </details>
-                <details class="fade-in-up delay-4">
-                    <summary>¿Hay app móvil?</summary>
-                    <div class="faq-answer">Sí, disponible para iOS y Android. Optimizada para uso en terreno con modo offline.</div>
-                </details>
-                <details class="fade-in-up delay-5">
-                    <summary>¿Cómo es la implementación?</summary>
-                    <div class="faq-answer">Onboarding guiado de 2 semanas con capacitación y soporte dedicado incluido.</div>
-                </details>
-                <details class="fade-in-up delay-6">
-                    <summary>¿Puedo migrar datos de otros sistemas?</summary>
-                    <div class="faq-answer">Sí. Servicio de migración incluido con soporte técnico para una transición sin problemas.</div>
-                </details>
-                <details class="fade-in-up delay-7">
-                    <summary>¿Qué pasa con mis datos si cancelo?</summary>
-                    <div class="faq-answer">Exportación completa de todos tus datos en formato estándar disponible en cualquier momento.</div>
-                </details>
+            <div class="section-label reveal">FAQ</div>
+            <h2 class="section-title reveal">Preguntas frecuentes</h2>
+            <div class="faq-grid">
+                <div class="faq-item reveal" style="transition-delay: 0.1s;">
+                    <button class="faq-question">
+                        ¿Cuánto tiempo toma implementar Infrannova?
+                        <i data-lucide="chevron-down" class="icon" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            La implementación típica toma entre 1 y 2 semanas, dependiendo de la complejidad de tus obras y la cantidad de datos a migrar. Nuestro equipo de onboarding te acompaña en cada paso del proceso.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="transition-delay: 0.2s;">
+                    <button class="faq-question">
+                        ¿Puedo integrar Infrannova con mi ERP actual?
+                        <i data-lucide="chevron-down" class="icon" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Sí, Infrannova ofrece integraciones nativas con los principales sistemas ERP del mercado incluyendo SAP, Oracle, y sistemas contables locales. También soportamos integraciones vía API REST.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="transition-delay: 0.3s;">
+                    <button class="faq-question">
+                        ¿Funciona sin conexión a internet?
+                        <i data-lucide="chevron-down" class="icon" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            La app móvil de Infrannova funciona en modo offline, sincronizando automáticamente cuando recuperes conexión. Ideal para obras en zonas con conectividad limitada.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="transition-delay: 0.4s;">
+                    <button class="faq-question">
+                        ¿Qué tipo de soporte ofrecen?
+                        <i data-lucide="chevron-down" class="icon" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                           _ofrecemos soporte por email, chat y teléfono según tu plan. Los planes Professional y Enterprise incluyen soporte prioritario con tiempo de respuesta garantizado y un account manager dedicado.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item reveal" style="transition-delay: 0.5s;">
+                    <button class="faq-question">
+                        ¿Mis datos están seguros?
+                        <i data-lucide="chevron-down" class="icon" style="width: 20px; height: 20px;"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Absolutamente. Utilizamos encriptación AES-256, backups diarios en 3 ubicaciones geográficas, y cumplimos con las normativas ISO 27001 y GDPR. Tu datos son tuyos y los protegemos como tal.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA Section -->
-    <section class="final-cta" id="contact">
+    <!-- Testimonials Section -->
+    <section class="testimonials">
         <div class="container">
-            <h2 class="fade-in">¿Listo para controlar todas tus obras?</h2>
-            <p class="fade-in delay-1">Únete a más de 12,000 usuarios que ya transformaron su gestión de obras</p>
-            <div class="final-cta-buttons fade-in delay-2">
-                <a href="#" class="btn btn-primary">Comenzar Gratis por 30 Días</a>
-                <a href="#" class="btn btn-secondary">Agendar Demo</a>
+            <div class="section-label reveal">Testimonios</div>
+            <h2 class="section-title reveal">Lo que dicen nuestros clientes</h2>
+            <div class="testimonials-carousel">
+                <div class="testimonials-track" id="testimonialsTrack">
+                    <div class="testimonials-grid">
+                        <div class="testimonial-card reveal" style="transition-delay: 0.1s;">
+                            <p class="testimonial-quote">"Infrannova nos dio visibilidad total en 5 obras simultáneas. Redujimos sobrecostos un 30% el primer año."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">ML</div>
+                                <div class="author-info">
+                                    <h4>Marcos López</h4>
+                                    <p>Director de Obras, Constructora Delta</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card reveal" style="transition-delay: 0.2s;">
+                            <p class="testimonial-quote">"La documentación digitalizó procesos que nos llevaban días. Ahora es instantáneo."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">CR</div>
+                                <div class="author-info">
+                                    <h4>Carolina Ruiz</h4>
+                                    <p>PM, Inmobiliaria Norte</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card reveal" style="transition-delay: 0.3s;">
+                            <p class="testimonial-quote">"El control de costos en tiempo real nos salvó de múltiples sobrecostos. Es indispensable."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">AT</div>
+                                <div class="author-info">
+                                    <h4>Andrés Torres</h4>
+                                    <p>Gerente, Constructora Andes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="prevBtn">
+                    <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
+                </button>
+                <button class="carousel-btn" id="nextBtn">
+                    <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-box reveal">
+                <h2>¿Listo para transformar tu gestión de obras?</h2>
+                <p>Únete a más de 150 constructoras que ya confían en Infrannova. Comienza tu prueba gratuita hoy.</p>
+                <a href="#" class="btn btn-primary magnetic-btn">
+                    Comenzar Prueba Gratuita
+                    <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -2262,7 +2611,9 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Scroll Progress Bar
+        // ==========================================
+        // SCROLL PROGRESS BAR
+        // ==========================================
         const scrollProgress = document.getElementById('scrollProgress');
         window.addEventListener('scroll', () => {
             const scrollTop = document.documentElement.scrollTop;
@@ -2271,58 +2622,268 @@
             scrollProgress.style.width = progress + '%';
         });
 
-        // Count-up animation with IntersectionObserver
+        // ==========================================
+        // NAV GLASSMORPHISM ON SCROLL
+        // ==========================================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ==========================================
+        // SCROLL REVEAL (IntersectionObserver)
+        // ==========================================
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ==========================================
+        // COUNT-UP ANIMATION WITH EASING
+        // ==========================================
         const countElements = document.querySelectorAll('.count-up');
+
+        const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
 
         const countObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
                     const target = parseInt(entry.target.dataset.target);
-                    let current = 0;
-                    const increment = target / 60;
-                    const duration = 2000;
-                    const stepTime = duration / 60;
+                    const duration = 2500;
+                    const startTime = performance.now();
 
-                    const counter = setInterval(() => {
-                        current += increment;
-                        if (current >= target) {
-                            entry.target.textContent = target.toLocaleString() + '+';
-                            clearInterval(counter);
+                    const animate = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easedProgress = easeOutQuart(progress);
+                        const current = Math.floor(easedProgress * target);
+
+                        if (target === 150) {
+                            entry.target.textContent = current + '+';
+                        } else if (target === 30) {
+                            entry.target.textContent = current + '%';
+                        } else if (target === 98) {
+                            entry.target.textContent = current + '%';
                         } else {
-                            entry.target.textContent = Math.floor(current).toLocaleString() + '+';
+                            entry.target.textContent = current.toLocaleString();
                         }
-                    }, stepTime);
 
-                    entry.target.classList.add('counted');
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            if (target === 150) {
+                                entry.target.textContent = target + '+';
+                            } else if (target === 30) {
+                                entry.target.textContent = target + '%';
+                            } else if (target === 98) {
+                                entry.target.textContent = target + '%';
+                            }
+                            entry.target.classList.add('counted');
+                        }
+                    };
+
+                    requestAnimationFrame(animate);
                 }
             });
         }, { threshold: 0.5 });
 
         countElements.forEach(el => countObserver.observe(el));
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href !== '#') {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+        // ==========================================
+        // PARTICLE SYSTEM (50 DOTS)
+        // ==========================================
+        const particlesContainer = document.getElementById('particles');
+
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+            particle.style.width = (2 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            particlesContainer.appendChild(particle);
+        }
+
+        // ==========================================
+        // FAQ ACCORDION
+        // ==========================================
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // Close all
+                faqItems.forEach(i => i.classList.remove('active'));
+
+                // Open clicked if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
                 }
             });
         });
 
-        // Nav background on scroll
-        const nav = document.querySelector('nav');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.style.background = 'rgba(10,12,14,0.95)';
-            } else {
-                nav.style.background = 'rgba(10,12,14,0.85)';
-            }
+        // ==========================================
+        // TESTIMONIAL CAROUSEL AUTO-PLAY
+        // ==========================================
+        const track = document.getElementById('testimonialsTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        let autoPlayInterval;
+
+        const updateCarousel = () => {
+            const cardWidth = track.querySelector('.testimonials-grid').offsetWidth;
+            track.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+        };
+
+        const nextSlide = () => {
+            currentSlide = (currentSlide + 1) % 3;
+            updateCarousel();
+        };
+
+        const prevSlide = () => {
+            currentSlide = (currentSlide - 1 + 3) % 3;
+            updateCarousel();
+        };
+
+        const startAutoPlay = () => {
+            autoPlayInterval = setInterval(nextSlide, 4000);
+        };
+
+        const stopAutoPlay = () => {
+            clearInterval(autoPlayInterval);
+        };
+
+        nextBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            nextSlide();
+            startAutoPlay();
         });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoPlay();
+            prevSlide();
+            startAutoPlay();
+        });
+
+        startAutoPlay();
+
+        // ==========================================
+        // MAGNETIC BUTTONS
+        // ==========================================
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // ==========================================
+        // GANTT CHART ANIMATION ON SCROLL
+        // ==========================================
+        const ganttFills = document.querySelectorAll('.gantt-fill');
+        const progressFills = document.querySelectorAll('.progress-fill');
+
+        const ganttObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    ganttFills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+
+                    progressFills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const dashboardMockup = document.querySelector('.dashboard-mockup');
+        if (dashboardMockup) {
+            ganttObserver.observe(dashboardMockup);
+        }
+
+        // ==========================================
+        // SMOOTH SCROLL
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ==========================================
+        // PARALLAX EFFECT ON SHAPES
+        // ==========================================
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.geo-shape');
+
+            shapes.forEach((shape, index) => {
+                const speed = 0.05 + (index * 0.01);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // ==========================================
+        // DYNAMIC CONIC GRADIENT ANIMATION
+        // ==========================================
+        let angle = 0;
+        const conicCards = document.querySelectorAll('.conic-card');
+
+        const animateConic = () => {
+            angle += 0.5;
+            conicCards.forEach(card => {
+                card.style.background = `conic-gradient(from ${angle}deg, var(--primary), var(--accent), var(--primary))`;
+            });
+            requestAnimationFrame(animateConic);
+        };
+
+        // Start conic animation after a delay
+        setTimeout(animateConic, 2000);
+
     </script>
 </body>
 </html>
